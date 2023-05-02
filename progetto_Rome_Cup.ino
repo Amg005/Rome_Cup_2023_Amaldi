@@ -38,15 +38,35 @@ void setup() {
 unsigned long r, g, b;
 
 void loop() {
-  if(hc06.available()) {
-  char l = hc06.read();
-    if(l = "info") {
-       dht11();
-       lux();
-       terreno();
-       colore();
-      } 
-     }
+
+  if (hc06.available()) {
+    String input = hc06.readStringUntil('\n');
+    input.trim();
+    if (input == "dht") {
+      dht11();
+    }
+    if (input == "luce") {
+      lux();
+    }
+    if (input == "terreno") {
+      terreno();
+    }
+    if (input == "colore") {
+      colore();
+    }
+    if (input == "panoramica attiva") {
+      for (int i=0; i<= 5; i++) {
+        dht11();
+        lux();
+        terreno();
+        colore();
+        delay(1500);
+        hc06.println("/////////////////////////");
+        
+      }
+      
+    }
+  }
    }
   
 
@@ -83,7 +103,7 @@ void lux() {
 
 void terreno() {
   int umid_terreno = analogRead(UMIDPIN);
-  int perc_umid_terreno = map(umid_terreno, 1020, 284, 0, 100);
+  int perc_umid_terreno = map(umid_terreno, 1020, 400, 0, 100);
   Serial.println("Umidità del terreno");
   Serial.print(perc_umid_terreno);
   Serial.println("%");
